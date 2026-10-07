@@ -1,0 +1,53 @@
+{
+  "mode": "ANIMATION_FIXTURE / 动画样本",
+  "network": "ethereum-mainnet",
+  "checkedAt": "2026-10-07T06:00:00.000Z",
+  "classification": "NO_SUPPORTED_SWAP",
+  "headline": "未证实卖出",
+  "summary": "当前样本只包含外层转账事实；无法据此断言其他地方没有卖出。",
+  "confirmedFacts": [
+    "交易已确认，外层原生 ETH 数量为 20059.2。",
+    "未发现指定池的成功兑换事件。"
+  ],
+  "uncertainties": [
+    "未核验地址所属机构，未读取内部调用 trace。",
+    "外层转账不等于钱包净流出；无法确认全市场卖出方向。"
+  ],
+  "nextSteps": [
+    "回查交易、区块与日志来源。",
+    "补查其他交易池和后续路径。"
+  ],
+  "observation": {
+    "transaction": {
+      "hash": "0xabababababababababababababababababababababababababababababababab",
+      "from": "0x3434343434343434343434343434343434343434",
+      "to": null,
+      "nativeValueEth": "20059.2",
+      "input": "0x",
+      "status": "SUCCESS",
+      "blockNumber": 20449709,
+      "blockHash": "0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "timestamp": "2024-08-03T18:08:23.000Z",
+      "logCount": 0
+    },
+    "supportedSwaps": [],
+    "evidence": [
+      {
+        "type": "TRANSACTION",
+        "txHash": "0xabababababababababababababababababababababababababababababababab",
+        "blockHash": "0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+        "blockNumber": 20449709,
+        "description": "项目测试样本中的交易引用",
+        "source": "动画样本 / 非本次 RPC 读取"
+      }
+    ],
+    "scope": {
+      "protocol": "UNISWAP_V3",
+      "poolAddress": "0x1212121212121212121212121212121212121212",
+      "poolLabel": "Uniswap V3 WETH/USDC 0.05%",
+      "asset": "WETH",
+      "quoteAsset": "USDC",
+      "fee": 500
+    }
+  }
+}

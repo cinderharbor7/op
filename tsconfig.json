@@ -5,6 +5,8 @@
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "strict": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
     "noEmit": true,
     "lib": ["es2015"],
     "esModuleInterop": true,
@@ -12,5 +14,6 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true
   },
-  "exclude": ["remotion.config.ts"]
+  "include": ["src"],
+  "exclude": ["remotion.config.ts", "revisions", "native", "scripts", "build"]
 }

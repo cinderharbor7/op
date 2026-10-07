@@ -1,0 +1,222 @@
+{
+  "asset": "ETH",
+  "asOf": "2026-10-07T14:00:00.000Z",
+  "dataMode": "MOCK_CHAIN_FIXTURE",
+  "sourceNote": "All values are deterministic demo observations shaped like Ethereum mainnet aggregates. No RPC, indexer, wallet, or transaction is called by this page.",
+  "blockRange": {
+    "from": 23413920,
+    "to": 23500120
+  },
+  "priceUsd": 3482,
+  "metrics": [
+    {
+      "key": "sell-pressure",
+      "label": "DEX sell pressure",
+      "value": 1.94,
+      "display": "1.94×",
+      "unit": "vs previous 24h window",
+      "percentile": 91,
+      "state": "ELEVATED",
+      "direction": "UP",
+      "rationale": "Gross ETH sell volume is almost twice the previous-window baseline; this is the main short-horizon warning."
+    },
+    {
+      "key": "realized-vol",
+      "label": "Realized volatility",
+      "value": 72.4,
+      "display": "72.4%",
+      "unit": "7d annualized",
+      "percentile": 84,
+      "state": "ELEVATED",
+      "direction": "UP",
+      "rationale": "Higher volatility widens the left tail and makes the same liquidity shock more damaging."
+    },
+    {
+      "key": "runup",
+      "label": "Price run-up",
+      "value": 18.9,
+      "display": "+18.9%",
+      "unit": "7d",
+      "percentile": 79,
+      "state": "WATCH",
+      "direction": "UP",
+      "rationale": "A fast run-up raises crash probability without implying that the unconditional mean return must be negative."
+    },
+    {
+      "key": "leverage",
+      "label": "Leverage growth",
+      "value": 17.6,
+      "display": "+17.6%",
+      "unit": "30d open interest",
+      "percentile": 76,
+      "state": "WATCH",
+      "direction": "UP",
+      "rationale": "Accumulated leverage is a slower moving vulnerability that can turn a market shock into forced selling."
+    },
+    {
+      "key": "liquidity-gap",
+      "label": "Stablecoin liquidity gap",
+      "value": -8.2,
+      "display": "-8.2%",
+      "unit": "vs 30d depth",
+      "percentile": 71,
+      "state": "WATCH",
+      "direction": "DOWN",
+      "rationale": "A negative depth gap means less exit capacity is available when sell pressure arrives."
+    },
+    {
+      "key": "bubble",
+      "label": "Explosive-dynamics proxy",
+      "value": 81,
+      "display": "81/100",
+      "unit": "GSADF proxy",
+      "percentile": 82,
+      "state": "ELEVATED",
+      "direction": "UP",
+      "rationale": "The proxy is above its illustrative critical region; it is a bubble-state input, not a crash timestamp."
+    }
+  ],
+  "models": [
+    {
+      "id": "threshold",
+      "title": "Threshold early-warning",
+      "method": "KLR noise-to-signal screen",
+      "score": 82.7,
+      "confidence": 0.78,
+      "output": "6 / 6 indicators at watch or elevated",
+      "formula": "Warning = Σ wⱼ · I(xⱼ > cⱼ)",
+      "inputs": [
+        "DEX sell-pressure ratio",
+        "realized volatility",
+        "leverage growth",
+        "liquidity gap"
+      ],
+      "rationale": "The threshold layer is intentionally legible: it shows exactly which observable conditions are active and avoids hiding the trigger inside a black box.",
+      "citation": "Kaminsky (1998); Drehmann & Juselius (2014)"
+    },
+    {
+      "id": "logit",
+      "title": "Crash probability",
+      "method": "Rolling logistic model",
+      "score": 100,
+      "confidence": 0.68,
+      "output": "Illustrative probability: 31% for ≥12% drawdown in 10d (not fitted)",
+      "formula": "P(Crashₜ₊₁₀) = Λ(α + β′Xₜ)",
+      "inputs": [
+        "7d run-up",
+        "volatility",
+        "sell pressure",
+        "leverage growth"
+      ],
+      "rationale": "The score is a deterministic demo proxy. The displayed probability is an illustrative placeholder, not a fitted or out-of-sample estimate.",
+      "citation": "Chen, Hong & Stein (2001); Beutel et al. (2019)"
+    },
+    {
+      "id": "bubble",
+      "title": "Explosive price state",
+      "method": "GSADF-style proxy",
+      "score": 73.2,
+      "confidence": 0.61,
+      "output": "Bubble-state proxy: active",
+      "formula": "GSADF = supᵣ₁,ᵣ₂ ADFᵣ₁ᵣ₂",
+      "inputs": [
+        "price run-up",
+        "recursive right-tail statistic",
+        "realized volatility"
+      ],
+      "rationale": "This model detects explosive dynamics; it is evidence of fragility and does not claim that a crash must happen immediately.",
+      "citation": "Phillips, Shi & Yu (2015)"
+    },
+    {
+      "id": "regime",
+      "title": "Liquidity regime",
+      "method": "State-dependent shock model",
+      "score": 94.6,
+      "confidence": 0.72,
+      "output": "Illustrative fragile-regime probability: 74% (not fitted)",
+      "formula": "Return = αₛ + βₛ · LiquidityShock + ε",
+      "inputs": [
+        "sell-pressure shock",
+        "depth gap",
+        "realized volatility"
+      ],
+      "rationale": "A sell shock has a larger expected loss in a fragile regime, so the same flow is not interpreted in isolation.",
+      "citation": "Acharya, Amihud & Bharath (2013); Jiang et al. (2022)"
+    },
+    {
+      "id": "tail",
+      "title": "Left-tail quantile",
+      "method": "Conditional 5% return estimate",
+      "score": 100,
+      "confidence": 0.65,
+      "output": "Illustrative q₀.₀₅(10d return): −14.8% (not fitted)",
+      "formula": "Q₀.₀₅(rₜ₊₁₀ | Xₜ) = α₀.₀₅ + β′₀.₀₅Xₜ",
+      "inputs": [
+        "leverage expansion",
+        "volatility",
+        "price shock"
+      ],
+      "rationale": "The tail estimate focuses on the loss distribution rather than the average return, which is the decision variable for a defensive position.",
+      "citation": "Baron & Xiong (2017); Kalyvas (2020)"
+    }
+  ],
+  "composite": {
+    "score": 90.3,
+    "band": "CRITICAL",
+    "confidence": 0.7,
+    "horizon": "next 7–14 days",
+    "interpretation": "Several independent layers agree that ETH is fragile: sell pressure and volatility are immediate, while leverage and explosive dynamics are slower structural warnings."
+  },
+  "recommendation": {
+    "stance": "DEFENSIVE",
+    "action": "Reduce ETH exposure by 20–30 percentage points; pause new leverage and keep a stablecoin liquidity buffer.",
+    "currentExposurePct": 72,
+    "targetExposurePct": 45,
+    "confidence": 0.7,
+    "rationale": "The recommendation is sized to the overlap of model signals, not to a single forecast. It is a risk budget suggestion and does not execute trades."
+  },
+  "evidence": [
+    {
+      "label": "Sell-pressure window",
+      "value": "194M USD · 42,080 swaps · 18,420 wallets",
+      "source": "OnchainSignalState / DEX aggregate",
+      "status": "OBSERVED"
+    },
+    {
+      "label": "Block range",
+      "value": "23,413,920 → 23,500,120",
+      "source": "Ethereum mainnet fixture",
+      "status": "OBSERVED"
+    },
+    {
+      "label": "Regression horizon",
+      "value": "10d crash event and 7–14d risk budget",
+      "source": "Model design derived from cited papers",
+      "status": "DERIVED"
+    },
+    {
+      "label": "Known limitation",
+      "value": "Synthetic fixture; no live chain refresh or fitted standard errors",
+      "source": "Demo disclosure",
+      "status": "LIMITATION"
+    }
+  ],
+  "curve": [
+    {
+      "label": "Normal",
+      "score": 28
+    },
+    {
+      "label": "Watch",
+      "score": 48
+    },
+    {
+      "label": "Current",
+      "score": 90.3
+    },
+    {
+      "label": "Stress",
+      "score": 100
+    }
+  ]
+}
