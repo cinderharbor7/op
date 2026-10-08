@@ -11,10 +11,10 @@ export const Wallet = () => {
     <AbsoluteFill style={{ fontFamily: sans }}>
       <FramedStage timeOffset={63.5}>
         <NativePage
-          state={{ page: "home", connected: done }}
+          state={{ page: "attestations", connected: done }}
           camera={{
             from: "$viewport",
-            to: ".site-header",
+            to: '[data-action="wallet"]',
             mix: move(f, 0, 30) * (1 - move(f, 50, 80)),
             zoom: 1 + move(f, 0, 30) * 0.55 * (1 - move(f, 50, 80)),
           }}

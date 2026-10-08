@@ -56,6 +56,30 @@ export const ProjectName = ({ start = 390 }: { start?: number }) => {
         >
           [
         </span>
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            color: C.ink,
+            opacity: move(f, 0, 8),
+            translate: `${move(f, 0, 16, -110, 0)}px -5px`,
+          }}
+        >
+          <svg
+            viewBox="0 0 40 40"
+            width={180}
+            height={180}
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M8 26C3 8 28 0 34 16M12 30C4 9 31 4 30 21M17 33C4 17 24 5 26 19c1 6-7 6-7 0M22 35C10 29 9 18 16 13M29 31c-4 0-8-3-10-7M34 26c-2 1-4 1-6 0"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
         {Array.from(word).map((ch, i) => {
           const age = f - i * 0.8,
             pulse =

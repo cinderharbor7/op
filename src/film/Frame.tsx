@@ -5,16 +5,18 @@ import { C, move } from "../design";
 export const FramedStage = ({
   timeOffset = 0,
   enter = true,
+  background = true,
   children,
 }: {
   timeOffset?: number;
   enter?: boolean;
+  background?: boolean;
   children: React.ReactNode;
 }) => {
   const f = useCurrentFrame();
   return (
     <AbsoluteFill>
-      <PixelStarfield timeOffset={timeOffset} />
+      {background && <PixelStarfield timeOffset={timeOffset} />}
       <div
         style={{
           position: "absolute",
@@ -22,7 +24,7 @@ export const FramedStage = ({
           opacity: enter ? move(f, 0, 30) : 1,
         }}
       >
-        <AsciiFluidBackground timeOffset={timeOffset} />
+        {background && <AsciiFluidBackground timeOffset={timeOffset} />}
       </div>
       <div
         style={{
